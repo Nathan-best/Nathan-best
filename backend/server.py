@@ -61,7 +61,7 @@ class Job(BaseModel):
     issue_description: str
     location: str
     urgency: str  # 'low', 'medium', 'high'
-    status: str  # 'open', 'accepted', 'in_progress', 'completed', 'paid'
+    status: str = "open"  # 'open', 'accepted', 'in_progress', 'completed', 'paid'
     budget: float
     assigned_tech_id: Optional[str] = None
     assigned_tech_name: Optional[str] = None

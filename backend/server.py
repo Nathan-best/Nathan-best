@@ -453,40 +453,52 @@ async def get_job_matches(
     techs = await db.users.find({"role": "technician", "verified": True}, {"_id": 0}).to_list(100)
     
     if not techs:
-        return {"matches": [], "message": "No verified technicians available"}
+        return {"matches": [], "message": "No verified technicians available", "technicians": []}
     
-    # Use GPT-5 for matching
-    api_key = os.environ.get('EMERGENT_LLM_KEY')
-    chat = LlmChat(
-        api_key=api_key,
-        session_id=f"job-match-{job_id}",
-        system_message="You are an AI assistant helping match robotics technicians to maintenance jobs. Analyze the job requirements and technician profiles to provide the best matches."
-    )
-    chat.with_model("openai", "gpt-5")
-    
-    prompt = f"""
-Job Details:
-- Title: {job_doc['title']}
-- Equipment: {job_doc['equipment_type']}
-- Location: {job_doc['location']}
-- Issue: {job_doc['issue_description']}
-- Urgency: {job_doc['urgency']}
-- Budget: ${job_doc['budget']}
+    # Use GPT-5 for matching with timeout handling
+    try:
+        api_key = os.environ.get('EMERGENT_LLM_KEY')
+        chat = LlmChat(
+            api_key=api_key,
+            session_id=f"job-match-{job_id}",
+            system_message="You are an AI assistant helping match robotics technicians to maintenance jobs. Be concise and provide top 3 matches."
+        )
+        chat.with_model("openai", "gpt-5")
+        
+        prompt = f"""
+Job: {job_doc['title']} | Equipment: {job_doc['equipment_type']} | Location: {job_doc['location']} | Budget: ${job_doc['budget']}
 
-Available Technicians:
-{chr(10).join([f"- {t['name']} | Location: {t.get('location', 'N/A')} | Specializations: {', '.join(t.get('specializations', []))} | Rating: {t.get('rating', 0)}/5" for t in techs])}
+Technicians:
+{chr(10).join([f"{i+1}. {t['name']} - {t.get('location', 'N/A')} - {', '.join(t.get('specializations', [])[:2])} - {t.get('rating', 0)}/5" for i, t in enumerate(techs[:10])])}
 
-Provide the top 3 best matches with reasoning. Format as JSON array with fields: tech_name, match_score (0-100), reasoning.
+List top 3 matches with brief reason (1 sentence each).
 """
-    
-    user_message = UserMessage(text=prompt)
-    response = await chat.send_message(user_message)
-    
-    return {
-        "job": job_doc,
-        "ai_recommendation": response,
-        "technicians": techs
-    }
+        
+        user_message = UserMessage(text=prompt)
+        
+        # Use asyncio.wait_for with 45 second timeout
+        import asyncio
+        response = await asyncio.wait_for(chat.send_message(user_message), timeout=45.0)
+        
+        return {
+            "job": job_doc,
+            "ai_recommendation": response,
+            "technicians": techs
+        }
+    except asyncio.TimeoutError:
+        # Fallback to simple matching if AI times out
+        return {
+            "job": job_doc,
+            "ai_recommendation": "AI matching temporarily unavailable. Showing all verified technicians sorted by rating.",
+            "technicians": sorted(techs, key=lambda x: x.get('rating', 0), reverse=True)
+        }
+    except Exception as e:
+        # Fallback on any error
+        return {
+            "job": job_doc,
+            "ai_recommendation": f"AI matching unavailable. Showing all verified technicians.",
+            "technicians": techs
+        }
 
 # ===== Payment Endpoints =====
 

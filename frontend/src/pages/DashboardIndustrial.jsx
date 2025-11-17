@@ -157,28 +157,28 @@ const DashboardIndustrial = ({ user, setUser }) => {
     <div className="min-h-screen tech-grid-bg">
       {/* Industrial Header */}
       <div className="bg-charcoal/90 border-b border-electric-blue/20 backdrop-blur-md sticky top-0 z-40">
-        <div className=\"max-w-7xl mx-auto px-6 py-4\">
-          <div className=\"flex justify-between items-center\">
-            <div className=\"flex items-center gap-4\">
-              <div className=\"w-12 h-12 bg-gradient-to-br from-electric-blue to-blue-600 rounded-lg flex items-center justify-center relative\">
-                <svg className=\"w-7 h-7 text-white\" fill=\"none\" stroke=\"currentColor\" viewBox=\"0 0 24 24\">
+        <div className="max-w-7xl mx-auto px-6 py-4\">
+          <div className="flex justify-between items-center\">
+            <div className="flex items-center gap-4\">
+              <div className="w-12 h-12 bg-gradient-to-br from-electric-blue to-blue-600 rounded-lg flex items-center justify-center relative\">
+                <svg className="w-7 h-7 text-white\" fill=\"none\" stroke=\"currentColor\" viewBox=\"0 0 24 24\">
                   <path strokeLinecap=\"round\" strokeLinejoin=\"round\" strokeWidth={2.5} d=\"M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z\" />
                 </svg>
-                <div className=\"absolute inset-0 bg-electric-blue/30 rounded-lg blur-lg\"></div>
+                <div className="absolute inset-0 bg-electric-blue/30 rounded-lg blur-lg\"></div>
               </div>
               <div>
-                <div className=\"text-xs text-steel-gray font-inter\">OPERATOR</div>
-                <div className=\"font-orbitron font-bold text-tech-white\">{user.name}</div>
+                <div className="text-xs text-steel-gray font-inter\">OPERATOR</div>
+                <div className="font-orbitron font-bold text-tech-white\">{user.name}</div>
               </div>
             </div>
-            <div className=\"flex items-center gap-3\">
-              <div className=\"status-badge capitalize\">{user.role}</div>
+            <div className="flex items-center gap-3\">
+              <div className="status-badge capitalize\">{user.role}</div>
               {user.role === 'technician' && (
                 <div className={`status-badge ${user.verified ? 'status-online' : 'status-urgent'}`}>
                   {user.verified ? 'VERIFIED' : 'PENDING'}
                 </div>
               )}
-              <button onClick={handleLogout} className=\"neon-outline px-6 py-2\" data-testid=\"logout-button\">
+              <button onClick={handleLogout} className="neon-outline px-6 py-2\" data-testid=\"logout-button\">
                 LOGOUT
               </button>
             </div>
@@ -186,38 +186,38 @@ const DashboardIndustrial = ({ user, setUser }) => {
         </div>
       </div>
 
-      <div className=\"max-w-7xl mx-auto px-6 py-8\">
+      <div className="max-w-7xl mx-auto px-6 py-8\">
         {/* Admin Stats */}
         {user.role === 'admin' && stats && (
-          <div className=\"grid md:grid-cols-4 gap-6 mb-8 slide-in\" data-testid=\"admin-stats-section\">
-            <div className=\"metallic-panel p-6\">
-              <div className=\"text-4xl font-orbitron font-bold text-electric-blue\">{stats.total_jobs}</div>
-              <div className=\"text-sm text-steel-gray mt-1 font-inter\">TOTAL JOBS</div>
+          <div className="grid md:grid-cols-4 gap-6 mb-8 slide-in\" data-testid=\"admin-stats-section\">
+            <div className="metallic-panel p-6\">
+              <div className="text-4xl font-orbitron font-bold text-electric-blue\">{stats.total_jobs}</div>
+              <div className="text-sm text-steel-gray mt-1 font-inter\">TOTAL JOBS</div>
             </div>
-            <div className=\"metallic-panel p-6\">
-              <div className=\"text-4xl font-orbitron font-bold text-success-green\">{stats.verified_technicians}</div>
-              <div className=\"text-sm text-steel-gray mt-1 font-inter\">VERIFIED TECHS</div>
+            <div className="metallic-panel p-6\">
+              <div className="text-4xl font-orbitron font-bold text-success-green\">{stats.verified_technicians}</div>
+              <div className="text-sm text-steel-gray mt-1 font-inter\">VERIFIED TECHS</div>
             </div>
-            <div className=\"metallic-panel p-6\">
-              <div className=\"text-4xl font-orbitron font-bold text-neon-yellow\">${stats.total_platform_revenue.toFixed(2)}</div>
-              <div className=\"text-sm text-steel-gray mt-1 font-inter\">PLATFORM REVENUE</div>
+            <div className="metallic-panel p-6\">
+              <div className="text-4xl font-orbitron font-bold text-neon-yellow\">${stats.total_platform_revenue.toFixed(2)}</div>
+              <div className="text-sm text-steel-gray mt-1 font-inter\">PLATFORM REVENUE</div>
             </div>
-            <div className=\"metallic-panel p-6\">
-              <div className=\"text-4xl font-orbitron font-bold text-tech-white\">${stats.total_transaction_volume.toFixed(2)}</div>
-              <div className=\"text-sm text-steel-gray mt-1 font-inter\">TOTAL VOLUME</div>
+            <div className="metallic-panel p-6\">
+              <div className="text-4xl font-orbitron font-bold text-tech-white\">${stats.total_transaction_volume.toFixed(2)}</div>
+              <div className="text-sm text-steel-gray mt-1 font-inter\">TOTAL VOLUME</div>
             </div>
           </div>
         )}
 
         {/* Dashboard Header */}
-        <div className=\"flex justify-between items-center mb-8\">
-          <h1 className=\"text-4xl font-orbitron font-black text-tech-white\">
+        <div className="flex justify-between items-center mb-8\">
+          <h1 className="text-4xl font-orbitron font-black text-tech-white\">
             {user.role === 'warehouse' ? 'MY REPAIR REQUESTS' : user.role === 'technician' ? 'JOB QUEUE' : 'SYSTEM OVERVIEW'}
           </h1>
           {user.role === 'warehouse' && (
             <button 
               onClick={() => setShowJobDialog(true)}
-              className=\"neon-button text-lg px-8\"
+              className="neon-button text-lg px-8\"
               data-testid=\"post-job-button\"
             >
               REQUEST REPAIR
@@ -226,16 +226,16 @@ const DashboardIndustrial = ({ user, setUser }) => {
         </div>
 
         {/* Jobs List */}
-        <div className=\"grid gap-6\" data-testid=\"jobs-list\">
+        <div className="grid gap-6\" data-testid=\"jobs-list\">
           {jobs.length === 0 ? (
-            <div className=\"metallic-panel p-12 text-center\">
-              <div className=\"text-steel-gray mb-4\">
-                <svg className=\"w-20 h-20 mx-auto tech-icon\" fill=\"none\" stroke=\"currentColor\" viewBox=\"0 0 24 24\">
+            <div className="metallic-panel p-12 text-center\">
+              <div className="text-steel-gray mb-4\">
+                <svg className="w-20 h-20 mx-auto tech-icon\" fill=\"none\" stroke=\"currentColor\" viewBox=\"0 0 24 24\">
                   <path strokeLinecap=\"round\" strokeLinejoin=\"round\" strokeWidth={1.5} d=\"M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4\" />
                 </svg>
               </div>
-              <p className=\"text-tech-white font-orbitron font-bold text-xl mb-2\">NO ACTIVE JOBS</p>
-              <p className=\"text-steel-gray font-inter\">
+              <p className="text-tech-white font-orbitron font-bold text-xl mb-2\">NO ACTIVE JOBS</p>
+              <p className="text-steel-gray font-inter\">
                 {user.role === 'warehouse' ? 'Submit your first repair request to get started' : 'Check back soon for new repair opportunities'}
               </p>
             </div>
@@ -243,14 +243,14 @@ const DashboardIndustrial = ({ user, setUser }) => {
             jobs.map((job) => (
               <div 
                 key={job.id} 
-                className=\"tech-card p-6 cursor-pointer\"
+                className="tech-card p-6 cursor-pointer\"
                 onClick={() => navigate(`/jobs/${job.id}`)}
                 data-testid={`job-card-${job.id}`}
               >
-                <div className=\"flex justify-between items-start\">
-                  <div className=\"flex-1\">
-                    <div className=\"flex items-center gap-3 mb-3\">
-                      <h3 className=\"text-2xl font-orbitron font-bold text-tech-white\">{job.title}</h3>
+                <div className="flex justify-between items-start\">
+                  <div className="flex-1\">
+                    <div className="flex items-center gap-3 mb-3\">
+                      <h3 className="text-2xl font-orbitron font-bold text-tech-white\">{job.title}</h3>
                       <div className={`status-badge ${getStatusColor(job.status)}`}>
                         {job.status.replace('_', ' ').toUpperCase()}
                       </div>
@@ -258,38 +258,38 @@ const DashboardIndustrial = ({ user, setUser }) => {
                         {job.urgency.toUpperCase()}
                       </div>
                     </div>
-                    <p className=\"text-steel-gray mb-4 font-inter\">{job.issue_description}</p>
-                    <div className=\"flex gap-6 text-sm text-steel-gray font-inter\">
-                      <span className=\"flex items-center gap-2\">
-                        <svg className=\"w-4 h-4\" fill=\"none\" stroke=\"currentColor\" viewBox=\"0 0 24 24\">
+                    <p className="text-steel-gray mb-4 font-inter\">{job.issue_description}</p>
+                    <div className="flex gap-6 text-sm text-steel-gray font-inter\">
+                      <span className="flex items-center gap-2\">
+                        <svg className="w-4 h-4\" fill=\"none\" stroke=\"currentColor\" viewBox=\"0 0 24 24\">
                           <path strokeLinecap=\"round\" strokeLinejoin=\"round\" strokeWidth={2} d=\"M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z\" />
                           <path strokeLinecap=\"round\" strokeLinejoin=\"round\" strokeWidth={2} d=\"M15 11a3 3 0 11-6 0 3 3 0 016 0z\" />
                         </svg>
                         {job.location}
                       </span>
-                      <span className=\"flex items-center gap-2\">
-                        <svg className=\"w-4 h-4\" fill=\"none\" stroke=\"currentColor\" viewBox=\"0 0 24 24\">
+                      <span className="flex items-center gap-2\">
+                        <svg className="w-4 h-4\" fill=\"none\" stroke=\"currentColor\" viewBox=\"0 0 24 24\">
                           <path strokeLinecap=\"round\" strokeLinejoin=\"round\" strokeWidth={2} d=\"M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z\" />
                           <path strokeLinecap=\"round\" strokeLinejoin=\"round\" strokeWidth={2} d=\"M15 12a3 3 0 11-6 0 3 3 0 016 0z\" />
                         </svg>
                         {job.equipment_type}
                       </span>
-                      <span className=\"flex items-center gap-2 text-neon-yellow font-bold\">
-                        <svg className=\"w-4 h-4\" fill=\"none\" stroke=\"currentColor\" viewBox=\"0 0 24 24\">
+                      <span className="flex items-center gap-2 text-neon-yellow font-bold\">
+                        <svg className="w-4 h-4\" fill=\"none\" stroke=\"currentColor\" viewBox=\"0 0 24 24\">
                           <path strokeLinecap=\"round\" strokeLinejoin=\"round\" strokeWidth={2} d=\"M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z\" />
                         </svg>
                         ${job.budget}
                       </span>
                     </div>
                   </div>
-                  <div className=\"text-right ml-4\">
+                  <div className="text-right ml-4\">
                     {user.role === 'technician' && job.status === 'open' && (
                       <button 
                         onClick={(e) => {
                           e.stopPropagation();
                           handleAcceptJob(job.id);
                         }}
-                        className=\"neon-button\"
+                        className="neon-button\"
                         data-testid={`accept-job-${job.id}`}
                       >
                         ACCEPT JOB
@@ -301,7 +301,7 @@ const DashboardIndustrial = ({ user, setUser }) => {
                           e.stopPropagation();
                           handleCompleteJob(job.id);
                         }}
-                        className=\"neon-yellow-button\"
+                        className="neon-yellow-button\"
                         data-testid={`complete-job-${job.id}`}
                       >
                         MARK COMPLETE
@@ -318,36 +318,36 @@ const DashboardIndustrial = ({ user, setUser }) => {
       {/* Create Job Dialog */}
       <TooltipProvider>
         <Dialog open={showJobDialog} onOpenChange={setShowJobDialog}>
-          <DialogContent className=\"max-w-2xl bg-graphite border-2 border-electric-blue/30\" data-testid=\"create-job-dialog\" aria-describedby=\"create-job-description\">
+          <DialogContent className="max-w-2xl bg-graphite border-2 border-electric-blue/30\" data-testid=\"create-job-dialog\" aria-describedby=\"create-job-description\">
             <DialogHeader>
-              <DialogTitle className=\"text-2xl font-orbitron font-bold text-tech-white\">REQUEST REPAIR</DialogTitle>
-              <DialogDescription id=\"create-job-description\" className=\"text-steel-gray font-inter\">
+              <DialogTitle className="text-2xl font-orbitron font-bold text-tech-white\">REQUEST REPAIR</DialogTitle>
+              <DialogDescription id=\"create-job-description\" className="text-steel-gray font-inter\">
                 Submit detailed information about your robotics equipment issue
               </DialogDescription>
             </DialogHeader>
-            <div className=\"space-y-4 mt-4\">
+            <div className="space-y-4 mt-4\">
               <div>
-                <Label htmlFor=\"job-title\" className=\"text-tech-white font-inter font-semibold mb-2 block\">JOB TITLE * <span className=\"text-xs text-steel-gray font-normal\">(min 5 characters)</span></Label>
+                <Label htmlFor=\"job-title\" className="text-tech-white font-inter font-semibold mb-2 block\">JOB TITLE * <span className="text-xs text-steel-gray font-normal\">(min 5 characters)</span></Label>
                 <Input 
                   id=\"job-title\"
                   placeholder=\"e.g., AMR navigation sensor malfunction\" 
                   value={jobData.title}
                   onChange={(e) => setJobData({...jobData, title: e.target.value})}
-                  className=\"tech-input\"
+                  className="tech-input\"
                   data-testid=\"job-title-input\"
                   maxLength={200}
                   aria-required=\"true\"
                 />
-                <p className=\"text-xs text-steel-gray mt-1 font-inter\">{jobData.title.length}/200 characters</p>
+                <p className="text-xs text-steel-gray mt-1 font-inter\">{jobData.title.length}/200 characters</p>
               </div>
 
               <div>
-                <Label htmlFor=\"equipment-type\" className=\"text-tech-white font-inter font-semibold mb-2 block\">EQUIPMENT TYPE *</Label>
+                <Label htmlFor=\"equipment-type\" className="text-tech-white font-inter font-semibold mb-2 block\">EQUIPMENT TYPE *</Label>
                 <select
                   id=\"equipment-type\"
                   value={jobData.equipment_type}
                   onChange={(e) => setJobData({...jobData, equipment_type: e.target.value})}
-                  className=\"tech-input w-full\"
+                  className="tech-input w-full\"
                   data-testid=\"equipment-type-input\"
                   aria-required=\"true\"
                 >
@@ -363,37 +363,37 @@ const DashboardIndustrial = ({ user, setUser }) => {
               </div>
 
               <div>
-                <Label htmlFor=\"issue-desc\" className=\"text-tech-white font-inter font-semibold mb-2 block\">ISSUE DESCRIPTION * <span className=\"text-xs text-steel-gray font-normal\">(min 10 characters)</span></Label>
+                <Label htmlFor=\"issue-desc\" className="text-tech-white font-inter font-semibold mb-2 block\">ISSUE DESCRIPTION * <span className="text-xs text-steel-gray font-normal\">(min 10 characters)</span></Label>
                 <Textarea 
                   id=\"issue-desc\"
                   placeholder=\"Error code, symptoms, when it started, attempted fixes...\" 
                   value={jobData.issue_description}
                   onChange={(e) => setJobData({...jobData, issue_description: e.target.value})}
-                  className=\"tech-input\"
+                  className="tech-input\"
                   rows={4}
                   data-testid=\"issue-description-input\"
                   maxLength={2000}
                   aria-required=\"true\"
                 />
-                <p className=\"text-xs text-steel-gray mt-1 font-inter\">{jobData.issue_description.length}/2000 characters</p>
+                <p className="text-xs text-steel-gray mt-1 font-inter\">{jobData.issue_description.length}/2000 characters</p>
               </div>
 
-              <div className=\"grid grid-cols-2 gap-4\">
+              <div className="grid grid-cols-2 gap-4\">
                 <div>
-                  <Label htmlFor=\"job-location\" className=\"text-tech-white font-inter font-semibold mb-2 block\">LOCATION *</Label>
+                  <Label htmlFor=\"job-location\" className="text-tech-white font-inter font-semibold mb-2 block\">LOCATION *</Label>
                   <Input 
                     id=\"job-location\"
                     placeholder=\"Inglewood, CA\" 
                     value={jobData.location}
                     onChange={(e) => setJobData({...jobData, location: e.target.value})}
-                    className=\"tech-input\"
+                    className="tech-input\"
                     data-testid=\"job-location-input\"
                     maxLength={200}
                     aria-required=\"true\"
                   />
                 </div>
                 <div>
-                  <Label htmlFor=\"job-budget\" className=\"text-tech-white font-inter font-semibold mb-2 block\">BUDGET (USD) *</Label>
+                  <Label htmlFor=\"job-budget\" className="text-tech-white font-inter font-semibold mb-2 block\">BUDGET (USD) *</Label>
                   <Input 
                     id=\"job-budget\"
                     type=\"number\" 
@@ -403,7 +403,7 @@ const DashboardIndustrial = ({ user, setUser }) => {
                     step=\"0.01\"
                     value={jobData.budget}
                     onChange={(e) => setJobData({...jobData, budget: e.target.value})}
-                    className=\"tech-input\"
+                    className="tech-input\"
                     data-testid=\"job-budget-input\"
                     aria-required=\"true\"
                   />
@@ -411,12 +411,12 @@ const DashboardIndustrial = ({ user, setUser }) => {
               </div>
 
               <div>
-                <Label htmlFor=\"urgency-select\" className=\"text-tech-white font-inter font-semibold mb-2 block\">URGENCY LEVEL</Label>
+                <Label htmlFor=\"urgency-select\" className="text-tech-white font-inter font-semibold mb-2 block\">URGENCY LEVEL</Label>
                 <select
                   id=\"urgency-select\"
                   value={jobData.urgency}
                   onChange={(e) => setJobData({...jobData, urgency: e.target.value})}
-                  className=\"tech-input w-full\"
+                  className="tech-input w-full\"
                   data-testid=\"urgency-select\"
                   aria-label=\"Select urgency level\"
                 >
@@ -426,21 +426,21 @@ const DashboardIndustrial = ({ user, setUser }) => {
                 </select>
               </div>
 
-              <div className=\"metallic-panel p-4 border-electric-blue/30\">
-                <div className=\"flex items-start gap-3\">
-                  <svg className=\"w-5 h-5 text-electric-blue mt-0.5 flex-shrink-0\" fill=\"none\" stroke=\"currentColor\" viewBox=\"0 0 24 24\">
+              <div className="metallic-panel p-4 border-electric-blue/30\">
+                <div className="flex items-start gap-3\">
+                  <svg className="w-5 h-5 text-electric-blue mt-0.5 flex-shrink-0\" fill=\"none\" stroke=\"currentColor\" viewBox=\"0 0 24 24\">
                     <path strokeLinecap=\"round\" strokeLinejoin=\"round\" strokeWidth={2} d=\"M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z\" />
                   </svg>
-                  <div className=\"text-sm text-tech-white font-inter\">
-                    <p className=\"font-bold mb-1\">PLATFORM FEE: 15%</p>
-                    <p className=\"text-steel-gray\">Commission deducted from payment. Remaining 85% goes to technician.</p>
+                  <div className="text-sm text-tech-white font-inter\">
+                    <p className="font-bold mb-1\">PLATFORM FEE: 15%</p>
+                    <p className="text-steel-gray\">Commission deducted from payment. Remaining 85% goes to technician.</p>
                   </div>
                 </div>
               </div>
 
               <button 
                 onClick={handleCreateJob}
-                className=\"neon-button w-full text-lg\"
+                className="neon-button w-full text-lg\"
                 disabled={loading}
                 data-testid=\"submit-job-button\"
                 aria-busy={loading}

@@ -1,115 +1,400 @@
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+/* Industrial Tech Dark Theme - Design System */
+:root {
+  /* Colors */
+  --charcoal: #111111;
+  --graphite: #1A1A1A;
+  --metallic: #2D2D2D;
+  --electric-blue: #2BA8FF;
+  --neon-yellow: #F2FF49;
+  --steel-gray: #4A4A4A;
+  --tech-white: #E8E8E8;
+  --success-green: #00FF88;
+  --warning-orange: #FF6B2B;
+  --error-red: #FF2B5E;
+  
+  /* Shadows & Glows */
+  --glow-blue: 0 0 20px rgba(43, 168, 255, 0.4);
+  --glow-yellow: 0 0 15px rgba(242, 255, 73, 0.3);
+  --shadow-deep: 0 8px 32px rgba(0, 0, 0, 0.6);
+  --shadow-panel: 0 4px 16px rgba(0, 0, 0, 0.8);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
 body {
-    margin: 0;
-    font-family:
-        -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
-        "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
-        sans-serif;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background: var(--charcoal);
+  color: var(--tech-white);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
 }
 
-code {
-    font-family:
-        source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace;
+/* Tech Grid Background */
+.tech-grid-bg {
+  background-color: var(--charcoal);
+  background-image: 
+    linear-gradient(rgba(43, 168, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(43, 168, 255, 0.03) 1px, transparent 1px);
+  background-size: 50px 50px;
+  position: relative;
 }
 
-@layer base {
-    :root {
-        --background: 0 0% 100%;
-        --foreground: 0 0% 3.9%;
-        --card: 0 0% 100%;
-        --card-foreground: 0 0% 3.9%;
-        --popover: 0 0% 100%;
-        --popover-foreground: 0 0% 3.9%;
-        --primary: 0 0% 9%;
-        --primary-foreground: 0 0% 98%;
-        --secondary: 0 0% 96.1%;
-        --secondary-foreground: 0 0% 9%;
-        --muted: 0 0% 96.1%;
-        --muted-foreground: 0 0% 45.1%;
-        --accent: 0 0% 96.1%;
-        --accent-foreground: 0 0% 9%;
-        --destructive: 0 84.2% 60.2%;
-        --destructive-foreground: 0 0% 98%;
-        --border: 0 0% 89.8%;
-        --input: 0 0% 89.8%;
-        --ring: 0 0% 3.9%;
-        --chart-1: 12 76% 61%;
-        --chart-2: 173 58% 39%;
-        --chart-3: 197 37% 24%;
-        --chart-4: 43 74% 66%;
-        --chart-5: 27 87% 67%;
-        --radius: 0.5rem;
-    }
-    .dark {
-        --background: 0 0% 3.9%;
-        --foreground: 0 0% 98%;
-        --card: 0 0% 3.9%;
-        --card-foreground: 0 0% 98%;
-        --popover: 0 0% 3.9%;
-        --popover-foreground: 0 0% 98%;
-        --primary: 0 0% 98%;
-        --primary-foreground: 0 0% 9%;
-        --secondary: 0 0% 14.9%;
-        --secondary-foreground: 0 0% 98%;
-        --muted: 0 0% 14.9%;
-        --muted-foreground: 0 0% 63.9%;
-        --accent: 0 0% 14.9%;
-        --accent-foreground: 0 0% 98%;
-        --destructive: 0 62.8% 30.6%;
-        --destructive-foreground: 0 0% 98%;
-        --border: 0 0% 14.9%;
-        --input: 0 0% 14.9%;
-        --ring: 0 0% 83.1%;
-        --chart-1: 220 70% 50%;
-        --chart-2: 160 60% 45%;
-        --chart-3: 30 80% 55%;
-        --chart-4: 280 65% 60%;
-        --chart-5: 340 75% 55%;
-    }
+.tech-grid-bg::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(circle at 50% 50%, rgba(43, 168, 255, 0.05), transparent 70%);
+  pointer-events: none;
 }
 
-@layer base {
-    * {
-        @apply border-border;
-    }
-    body {
-        @apply bg-background text-foreground;
-    }
+/* Headers - Orbitron Font */
+h1, h2, h3, h4, h5, h6, .orbitron {
+  font-family: 'Orbitron', sans-serif;
+  font-weight: 700;
+  letter-spacing: 0.5px;
 }
 
-@layer base {
-    [data-debug-wrapper="true"] {
-        display: contents !important;
-    }
+/* Metallic Panel */
+.metallic-panel {
+  background: linear-gradient(145deg, var(--graphite), var(--metallic));
+  border: 1px solid rgba(43, 168, 255, 0.2);
+  border-radius: 14px;
+  box-shadow: var(--shadow-panel);
+  position: relative;
+  overflow: hidden;
+}
 
-    [data-debug-wrapper="true"] > * {
-        margin-left: inherit;
-        margin-right: inherit;
-        margin-top: inherit;
-        margin-bottom: inherit;
-        padding-left: inherit;
-        padding-right: inherit;
-        padding-top: inherit;
-        padding-bottom: inherit;
-        column-gap: inherit;
-        row-gap: inherit;
-        gap: inherit;
-        border-left-width: inherit;
-        border-right-width: inherit;
-        border-top-width: inherit;
-        border-bottom-width: inherit;
-        border-left-style: inherit;
-        border-right-style: inherit;
-        border-top-style: inherit;
-        border-bottom-style: inherit;
-        border-left-color: inherit;
-        border-right-color: inherit;
-        border-top-color: inherit;
-        border-bottom-color: inherit;
-    }
+.metallic-panel::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(43, 168, 255, 0.1), transparent);
+  transition: left 0.5s;
+}
+
+.metallic-panel:hover::before {
+  left: 100%;
+}
+
+/* Neon Buttons */
+.neon-button {
+  background: linear-gradient(135deg, var(--electric-blue), #1E90D9);
+  color: white;
+  border: none;
+  border-radius: 14px;
+  padding: 12px 32px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(43, 168, 255, 0.3);
+}
+
+.neon-button::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.3);
+  transform: translate(-50%, -50%);
+  transition: width 0.6s, height 0.6s;
+}
+
+.neon-button:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--glow-blue);
+}
+
+.neon-button:hover::before {
+  width: 300px;
+  height: 300px;
+}
+
+.neon-button:active {
+  transform: translateY(0);
+}
+
+/* Neon Outline Button */
+.neon-outline {
+  background: transparent;
+  border: 2px solid var(--electric-blue);
+  color: var(--electric-blue);
+  border-radius: 14px;
+  padding: 10px 30px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.neon-outline:hover {
+  background: var(--electric-blue);
+  color: white;
+  box-shadow: var(--glow-blue);
+}
+
+/* Yellow Accent Button */
+.neon-yellow-button {
+  background: linear-gradient(135deg, var(--neon-yellow), #D9DD3A);
+  color: var(--charcoal);
+  border: none;
+  border-radius: 14px;
+  padding: 12px 32px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: var(--glow-yellow);
+}
+
+.neon-yellow-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0 25px rgba(242, 255, 73, 0.5);
+}
+
+/* Glowing Input Fields */
+.tech-input {
+  background: var(--metallic);
+  border: 1px solid rgba(43, 168, 255, 0.3);
+  border-radius: 10px;
+  padding: 12px 16px;
+  color: var(--tech-white);
+  font-size: 0.95rem;
+  transition: all 0.3s ease;
+  outline: none;
+}
+
+.tech-input:focus {
+  border-color: var(--electric-blue);
+  box-shadow: 0 0 12px rgba(43, 168, 255, 0.4);
+  background: rgba(43, 168, 255, 0.05);
+}
+
+.tech-input::placeholder {
+  color: rgba(232, 232, 232, 0.4);
+}
+
+/* Status Badges */
+.status-badge {
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.status-online {
+  background: rgba(0, 255, 136, 0.15);
+  color: var(--success-green);
+  border: 1px solid var(--success-green);
+}
+
+.status-urgent {
+  background: rgba(255, 43, 94, 0.15);
+  color: var(--error-red);
+  border: 1px solid var(--error-red);
+  animation: pulse-red 2s infinite;
+}
+
+.status-pending {
+  background: rgba(242, 255, 73, 0.15);
+  color: var(--neon-yellow);
+  border: 1px solid var(--neon-yellow);
+}
+
+.status-completed {
+  background: rgba(43, 168, 255, 0.15);
+  color: var(--electric-blue);
+  border: 1px solid var(--electric-blue);
+}
+
+/* Pulsing Animations */
+@keyframes pulse-blue {
+  0%, 100% { box-shadow: 0 0 5px rgba(43, 168, 255, 0.4); }
+  50% { box-shadow: 0 0 20px rgba(43, 168, 255, 0.8); }
+}
+
+@keyframes pulse-red {
+  0%, 100% { box-shadow: 0 0 5px rgba(255, 43, 94, 0.4); }
+  50% { box-shadow: 0 0 20px rgba(255, 43, 94, 0.8); }
+}
+
+@keyframes pulse-yellow {
+  0%, 100% { box-shadow: 0 0 5px rgba(242, 255, 73, 0.3); }
+  50% { box-shadow: 0 0 15px rgba(242, 255, 73, 0.6); }
+}
+
+.pulse-blue {
+  animation: pulse-blue 2s infinite;
+}
+
+.pulse-red {
+  animation: pulse-red 2s infinite;
+}
+
+/* Tech Card */
+.tech-card {
+  background: linear-gradient(145deg, var(--graphite), var(--metallic));
+  border: 1px solid rgba(43, 168, 255, 0.2);
+  border-radius: 14px;
+  padding: 20px;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+
+.tech-card::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--electric-blue), transparent);
+  transform: translateX(-100%);
+  transition: transform 0.5s;
+}
+
+.tech-card:hover {
+  border-color: var(--electric-blue);
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(43, 168, 255, 0.2);
+}
+
+.tech-card:hover::after {
+  transform: translateX(100%);
+}
+
+/* Loading Spinner */
+.tech-spinner {
+  border: 3px solid rgba(43, 168, 255, 0.2);
+  border-top: 3px solid var(--electric-blue);
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Neon Divider */
+.neon-divider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--electric-blue), transparent);
+  margin: 24px 0;
+}
+
+/* Scrollbar Styling */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--charcoal);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--metallic);
+  border-radius: 5px;
+  border: 2px solid var(--charcoal);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--electric-blue);
+}
+
+/* Icon Styles */
+.tech-icon {
+  color: var(--electric-blue);
+  filter: drop-shadow(0 0 4px rgba(43, 168, 255, 0.5));
+}
+
+/* Notification Badge */
+.notification-badge {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  background: var(--error-red);
+  color: white;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.7rem;
+  font-weight: 700;
+  animation: pulse-red 2s infinite;
+}
+
+/* Emergency Alert */
+.emergency-alert {
+  background: linear-gradient(135deg, rgba(255, 43, 94, 0.2), rgba(255, 107, 43, 0.2));
+  border: 2px solid var(--error-red);
+  border-radius: 14px;
+  padding: 16px;
+  animation: pulse-red 2s infinite;
+}
+
+/* Tech Select Dropdown */
+select.tech-input {
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%232BA8FF' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  padding-right: 36px;
+}
+
+/* Transition Utilities */
+.slide-in {
+  animation: slideIn 0.4s ease-out;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fade-in {
+  animation: fadeIn 0.5s ease-in;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }

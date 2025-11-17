@@ -76,12 +76,12 @@ class Job(BaseModel):
     completed_at: Optional[datetime] = None
 
 class JobCreate(BaseModel):
-    title: str
-    equipment_type: str
-    issue_description: str
-    location: str
-    urgency: str
-    budget: float
+    title: str = Field(..., min_length=5, max_length=200, description="Job title")
+    equipment_type: str = Field(..., min_length=2, max_length=100, description="Equipment type")
+    issue_description: str = Field(..., min_length=10, max_length=2000, description="Issue description")
+    location: str = Field(..., min_length=3, max_length=200, description="Job location")
+    urgency: str = Field(..., pattern="^(low|medium|high)$", description="Urgency level")
+    budget: float = Field(..., gt=0, le=100000, description="Budget in USD")
 
 class Application(BaseModel):
     model_config = ConfigDict(extra="ignore")

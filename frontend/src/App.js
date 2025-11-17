@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import axios from 'axios';
-import LandingPage from './pages/LandingPage';
+import LandingPagePro from './pages/LandingPagePro';
 import DashboardIndustrial from './pages/DashboardIndustrial';
 import JobDetails from './pages/JobDetails';
 import PaymentSuccess from './pages/PaymentSuccess';

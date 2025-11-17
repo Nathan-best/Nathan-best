@@ -337,10 +337,21 @@ async def create_job(
     if not user or user.role != 'warehouse':
         raise HTTPException(status_code=403, detail="Only warehouses can post jobs")
     
+    # Rate limiting per user
+    if not check_rate_limit(f"create_job_{user.id}", max_requests=20, window_seconds=3600):
+        raise HTTPException(status_code=429, detail="Job posting limit reached. Please try again later.")
+    
+    # Sanitize text inputs
     job = Job(
         warehouse_id=user.id,
         warehouse_name=user.name,
-        **job_data.model_dump()
+        title=sanitize_input(job_data.title),
+        equipment_type=sanitize_input(job_data.equipment_type),
+        issue_description=sanitize_input(job_data.issue_description),
+        location=sanitize_input(job_data.location),
+        urgency=job_data.urgency,
+        budget=job_data.budget,
+        status="open"
     )
     
     job_doc = job.model_dump()

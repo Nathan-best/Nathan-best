@@ -122,10 +122,10 @@ class Review(BaseModel):
     created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
 
 class ReviewCreate(BaseModel):
-    job_id: str
-    reviewee_id: str
-    rating: int
-    comment: Optional[str] = None
+    job_id: str = Field(..., min_length=1, description="Job ID")
+    reviewee_id: str = Field(..., min_length=1, description="User being reviewed")
+    rating: int = Field(..., ge=1, le=5, description="Rating from 1 to 5")
+    comment: Optional[str] = Field(None, min_length=10, max_length=1000, description="Review comment")
 
 class CheckoutRequest(BaseModel):
     job_id: str

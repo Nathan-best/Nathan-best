@@ -311,90 +311,134 @@ const Dashboard = ({ user, setUser }) => {
       </div>
 
       {/* Create Job Dialog */}
-      <Dialog open={showJobDialog} onOpenChange={setShowJobDialog}>
-        <DialogContent className="max-w-2xl" data-testid="create-job-dialog">
-          <DialogHeader>
-            <DialogTitle className="text-2xl font-bold">Post New Job</DialogTitle>
-          </DialogHeader>
-          <div className="space-y-4 mt-4">
-            <div>
-              <Label>Job Title *</Label>
-              <Input 
-                placeholder="e.g., Repair conveyor belt motor" 
-                value={jobData.title}
-                onChange={(e) => setJobData({...jobData, title: e.target.value})}
-                data-testid="job-title-input"
-              />
-            </div>
-
-            <div>
-              <Label>Equipment Type *</Label>
-              <Input 
-                placeholder="e.g., Conveyor belt, Pallet mover, AGV" 
-                value={jobData.equipment_type}
-                onChange={(e) => setJobData({...jobData, equipment_type: e.target.value})}
-                data-testid="equipment-type-input"
-              />
-            </div>
-
-            <div>
-              <Label>Issue Description</Label>
-              <Textarea 
-                placeholder="Describe the problem in detail..." 
-                value={jobData.issue_description}
-                onChange={(e) => setJobData({...jobData, issue_description: e.target.value})}
-                rows={4}
-                data-testid="issue-description-input"
-              />
-            </div>
-
-            <div className="grid grid-cols-2 gap-4">
+      <TooltipProvider>
+        <Dialog open={showJobDialog} onOpenChange={setShowJobDialog}>
+          <DialogContent className="max-w-2xl" data-testid="create-job-dialog" aria-describedby="create-job-description">
+            <DialogHeader>
+              <DialogTitle className="text-2xl font-bold">Post New Job</DialogTitle>
+              <DialogDescription id="create-job-description">
+                Fill out the form below to post a maintenance job. All fields marked with * are required.
+              </DialogDescription>
+            </DialogHeader>
+            <div className="space-y-4 mt-4">
               <div>
-                <Label>Location *</Label>
+                <Label htmlFor="job-title">Job Title * <span className="text-xs text-slate-500">(min 5 characters)</span></Label>
                 <Input 
-                  placeholder="Inglewood, CA" 
-                  value={jobData.location}
-                  onChange={(e) => setJobData({...jobData, location: e.target.value})}
-                  data-testid="job-location-input"
+                  id="job-title"
+                  placeholder="e.g., Repair conveyor belt motor" 
+                  value={jobData.title}
+                  onChange={(e) => setJobData({...jobData, title: e.target.value})}
+                  data-testid="job-title-input"
+                  maxLength={200}
+                  aria-required="true"
                 />
+                <p className="text-xs text-slate-500 mt-1">{jobData.title.length}/200 characters</p>
               </div>
+
               <div>
-                <Label>Budget (USD) *</Label>
-                <Input 
-                  type="number" 
-                  placeholder="500" 
-                  value={jobData.budget}
-                  onChange={(e) => setJobData({...jobData, budget: e.target.value})}
-                  data-testid="job-budget-input"
-                />
+                <Label htmlFor="equipment-type">Equipment Type *</Label>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Input 
+                      id="equipment-type"
+                      placeholder="e.g., Conveyor belt, Pallet mover, AGV" 
+                      value={jobData.equipment_type}
+                      onChange={(e) => setJobData({...jobData, equipment_type: e.target.value})}
+                      data-testid="equipment-type-input"
+                      maxLength={100}
+                      aria-required="true"
+                    />
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>Common types: Conveyor belts, Pallet movers, AGVs, Sorting arms, Robotic arms</p>
+                  </TooltipContent>
+                </Tooltip>
               </div>
-            </div>
 
-            <div>
-              <Label>Urgency</Label>
-              <Select value={jobData.urgency} onValueChange={(val) => setJobData({...jobData, urgency: val})}>
-                <SelectTrigger data-testid="urgency-select">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="low">Low</SelectItem>
-                  <SelectItem value="medium">Medium</SelectItem>
-                  <SelectItem value="high">High</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
+              <div>
+                <Label htmlFor="issue-desc">Issue Description * <span className="text-xs text-slate-500\">(min 10 characters)</span></Label>
+                <Textarea 
+                  id="issue-desc"
+                  placeholder="Describe the problem in detail: What's broken? What symptoms? When did it start?" 
+                  value={jobData.issue_description}
+                  onChange={(e) => setJobData({...jobData, issue_description: e.target.value})}
+                  rows={4}
+                  data-testid="issue-description-input"
+                  maxLength={2000}
+                  aria-required="true"
+                />
+                <p className="text-xs text-slate-500 mt-1">{jobData.issue_description.length}/2000 characters</p>
+              </div>
 
-            <Button 
-              onClick={handleCreateJob}
-              className="w-full bg-blue-600 hover:bg-blue-700"
-              disabled={loading}
-              data-testid="submit-job-button"
-            >
-              {loading ? 'Posting...' : 'Post Job'}
-            </Button>
-          </div>
-        </DialogContent>
-      </Dialog>
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <Label htmlFor="job-location">Location *</Label>
+                  <Input 
+                    id="job-location"
+                    placeholder="Inglewood, CA" 
+                    value={jobData.location}
+                    onChange={(e) => setJobData({...jobData, location: e.target.value})}
+                    data-testid="job-location-input"
+                    maxLength={200}
+                    aria-required="true"
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="job-budget">Budget (USD) * <span className="text-xs text-slate-500">(max $100,000)</span></Label>
+                  <Input 
+                    id="job-budget"
+                    type="number" 
+                    placeholder="500"
+                    min="1"
+                    max="100000"
+                    step="0.01"
+                    value={jobData.budget}
+                    onChange={(e) => setJobData({...jobData, budget: e.target.value})}
+                    data-testid="job-budget-input"
+                    aria-required="true"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <Label htmlFor="urgency-select">Urgency Level</Label>
+                <Select value={jobData.urgency} onValueChange={(val) => setJobData({...jobData, urgency: val})}>
+                  <SelectTrigger id="urgency-select" data-testid="urgency-select" aria-label="Select urgency level">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="low">Low - Can wait a few days</SelectItem>
+                    <SelectItem value="medium">Medium - Needed within 1-2 days</SelectItem>
+                    <SelectItem value="high">High - Urgent, ASAP</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                <div className="flex items-start gap-3">
+                  <svg className="w-5 h-5 text-blue-600 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z\" />
+                  </svg>
+                  <div className="text-sm text-blue-900">
+                    <p className="font-semibold mb-1">Platform Fee: 15%</p>
+                    <p className="text-blue-700">We take a 15% commission from the final payment. The remaining 85% goes directly to the technician.</p>
+                  </div>
+                </div>
+              </div>
+
+              <Button 
+                onClick={handleCreateJob}
+                className="w-full bg-blue-600 hover:bg-blue-700"
+                disabled={loading}
+                data-testid="submit-job-button"
+                aria-busy={loading}
+              >
+                {loading ? 'Posting Job...' : 'Post Job & Notify Technicians'}
+              </Button>
+            </div>
+          </DialogContent>
+        </Dialog>
+      </TooltipProvider>
     </div>
   );
 };

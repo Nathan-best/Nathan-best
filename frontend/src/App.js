@@ -48,7 +48,7 @@ function App() {
         <Routes>
           <Route 
             path="/" 
-            element={user ? <Navigate to="/dashboard" /> : <LandingPage setUser={setUser} />} 
+            element={user ? <Navigate to="/dashboard" /> : <LandingPagePro setUser={setUser} />} 
           />
           <Route 
             path="/dashboard" 

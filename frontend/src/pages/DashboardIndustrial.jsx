@@ -243,7 +243,7 @@ const DashboardIndustrial = ({ user, setUser }) => {
             jobs.map((job) => (
               <div 
                 key={job.id} 
-                className=\"tech-card p-6\cursor-pointer\"
+                className=\"tech-card p-6 cursor-pointer\"
                 onClick={() => navigate(`/jobs/${job.id}`)}
                 data-testid={`job-card-${job.id}`}
               >

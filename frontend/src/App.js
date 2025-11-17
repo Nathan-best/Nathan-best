@@ -36,8 +36,8 @@ function App() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+      <div className="min-h-screen tech-grid-bg flex items-center justify-center">
+        <div className="tech-spinner"></div>
       </div>
     );
   }
@@ -52,7 +52,7 @@ function App() {
           />
           <Route 
             path="/dashboard" 
-            element={user ? <Dashboard user={user} setUser={setUser} /> : <Navigate to="/" />} 
+            element={user ? <DashboardIndustrial user={user} setUser={setUser} /> : <Navigate to="/" />} 
           />
           <Route 
             path="/jobs/:jobId" 
@@ -64,7 +64,7 @@ function App() {
           />
         </Routes>
       </BrowserRouter>
-      <Toaster position="top-right" richColors />
+      <Toaster position="top-right" richColors theme="dark" />
     </div>
   );
 }

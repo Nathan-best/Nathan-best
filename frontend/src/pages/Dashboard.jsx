@@ -63,8 +63,29 @@ const Dashboard = ({ user, setUser }) => {
   };
 
   const handleCreateJob = async () => {
-    if (!jobData.title || !jobData.equipment_type || !jobData.budget) {
-      toast.error('Please fill all required fields');
+    // Enhanced validation
+    if (!jobData.title || jobData.title.length < 5) {
+      toast.error('Job title must be at least 5 characters');
+      return;
+    }
+    if (!jobData.equipment_type || jobData.equipment_type.length < 2) {
+      toast.error('Equipment type is required');
+      return;
+    }
+    if (!jobData.issue_description || jobData.issue_description.length < 10) {
+      toast.error('Please provide a detailed issue description (minimum 10 characters)');
+      return;
+    }
+    if (!jobData.location || jobData.location.length < 3) {
+      toast.error('Location is required');
+      return;
+    }
+    if (!jobData.budget || parseFloat(jobData.budget) <= 0) {
+      toast.error('Please enter a valid budget amount');
+      return;
+    }
+    if (parseFloat(jobData.budget) > 100000) {
+      toast.error('Budget cannot exceed $100,000');
       return;
     }
 
@@ -74,7 +95,7 @@ const Dashboard = ({ user, setUser }) => {
         ...jobData,
         budget: parseFloat(jobData.budget)
       });
-      toast.success('Job posted successfully!');
+      toast.success('Job posted successfully! Technicians will be notified.');
       setShowJobDialog(false);
       setJobData({
         title: '',
@@ -86,7 +107,8 @@ const Dashboard = ({ user, setUser }) => {
       });
       loadJobs();
     } catch (error) {
-      toast.error('Failed to create job');
+      const errorMsg = error.response?.data?.detail || 'Failed to create job. Please try again.';
+      toast.error(errorMsg);
     } finally {
       setLoading(false);
     }

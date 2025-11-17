@@ -189,7 +189,7 @@ const DashboardIndustrial = ({ user, setUser }) => {
       <div className="max-w-7xl mx-auto px-6 py-8">
         {/* Admin Stats */}
         {user.role === 'admin' && stats && (
-          <div className="grid md:grid-cols-4 gap-6 mb-8 slide-in" data-testid=\"admin-stats-section">
+          <div className="grid md:grid-cols-4 gap-6 mb-8 slide-in" data-testid="admin-stats-section">
             <div className="metallic-panel p-6">
               <div className="text-4xl font-orbitron font-bold text-electric-blue">{stats.total_jobs}</div>
               <div className="text-sm text-steel-gray mt-1 font-inter">TOTAL JOBS</div>

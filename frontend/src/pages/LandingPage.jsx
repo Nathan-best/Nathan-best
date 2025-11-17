@@ -64,21 +64,33 @@ const LandingPage = ({ setUser }) => {
   };
 
   const handleRoleSubmit = async () => {
-    if (!roleData.location || !roleData.phone) {
-      toast.error('Please fill all required fields');
+    // Enhanced validation
+    if (!roleData.location || roleData.location.length < 3) {
+      toast.error('Please enter a valid location (minimum 3 characters)');
       return;
     }
 
-    if (roleData.role === 'technician' && !roleData.specializations) {
-      toast.error('Please enter your specializations');
+    if (!roleData.phone || roleData.phone.length < 10) {
+      toast.error('Please enter a valid phone number');
+      return;
+    }
+
+    if (roleData.role === 'technician' && (!roleData.specializations || roleData.specializations.trim().length === 0)) {
+      toast.error('Please enter at least one specialization');
       return;
     }
 
     try {
       setLoading(true);
       const specs = roleData.role === 'technician' 
-        ? roleData.specializations.split(',').map(s => s.trim())
+        ? roleData.specializations.split(',').map(s => s.trim()).filter(s => s.length > 0)
         : [];
+
+      if (roleData.role === 'technician' && specs.length === 0) {
+        toast.error('Please enter valid specializations');
+        setLoading(false);
+        return;
+      }
 
       const response = await api.post('/auth/register', {
         ...roleData,
@@ -89,10 +101,11 @@ const LandingPage = ({ setUser }) => {
 
       document.cookie = `session_token=${response.data.session_token}; path=/; secure; samesite=none`;
       setUser(response.data.user);
-      toast.success('Account created successfully!');
+      toast.success(`Welcome to RobotiX Connect! Your ${roleData.role} account is ready.`);
       navigate('/dashboard');
     } catch (error) {
-      toast.error('Registration failed');
+      const errorMsg = error.response?.data?.detail || 'Registration failed. Please try again.';
+      toast.error(errorMsg);
     } finally {
       setLoading(false);
     }

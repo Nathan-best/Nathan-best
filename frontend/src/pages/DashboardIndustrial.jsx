@@ -154,9 +154,9 @@ const DashboardIndustrial = ({ user, setUser }) => {
   };
 
   return (
-    <div className=\"min-h-screen tech-grid-bg\">
+    <div className="min-h-screen tech-grid-bg">
       {/* Industrial Header */}
-      <div className=\"bg-charcoal/90 border-b border-electric-blue/20 backdrop-blur-md sticky top-0 z-40\">
+      <div className="bg-charcoal/90 border-b border-electric-blue/20 backdrop-blur-md sticky top-0 z-40">
         <div className=\"max-w-7xl mx-auto px-6 py-4\">
           <div className=\"flex justify-between items-center\">
             <div className=\"flex items-center gap-4\">

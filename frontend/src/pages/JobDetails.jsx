@@ -265,20 +265,27 @@ const JobDetails = ({ user }) => {
 
       {/* Review Dialog */}
       <Dialog open={showReviewDialog} onOpenChange={setShowReviewDialog}>
-        <DialogContent data-testid="review-dialog">
+        <DialogContent data-testid="review-dialog" aria-describedby="review-dialog-description">
           <DialogHeader>
             <DialogTitle>Leave a Review</DialogTitle>
+            <DialogDescription id="review-dialog-description">
+              Share your experience with {user.role === 'warehouse' ? 'this technician' : 'this warehouse'}. Your feedback helps improve our community.
+            </DialogDescription>
           </DialogHeader>
           <div className="space-y-4 mt-4">
             <div>
-              <Label>Rating</Label>
-              <div className="flex gap-2 mt-2">
+              <Label htmlFor="star-rating">Rating * <span className="text-xs text-slate-500">(Select {reviewData.rating} star{reviewData.rating !== 1 ? 's' : ''})</span></Label>
+              <div className="flex gap-2 mt-2" role="radiogroup" aria-label="Star rating" id="star-rating">
                 {[1, 2, 3, 4, 5].map((star) => (
                   <button
                     key={star}
+                    type="button"
                     onClick={() => setReviewData({...reviewData, rating: star})}
-                    className="text-3xl transition-colors"
+                    className="text-3xl transition-colors hover:scale-110 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded"
                     data-testid={`star-${star}`}
+                    aria-label={`${star} star${star !== 1 ? 's' : ''}`}
+                    role="radio"
+                    aria-checked={star <= reviewData.rating}
                   >
                     <span className={star <= reviewData.rating ? 'text-yellow-500' : 'text-slate-300'}>
                       ★
@@ -286,23 +293,41 @@ const JobDetails = ({ user }) => {
                   </button>
                 ))}
               </div>
+              <p className="text-xs text-slate-500 mt-2">
+                {reviewData.rating === 5 && '⭐ Excellent!'}
+                {reviewData.rating === 4 && '👍 Very Good'}
+                {reviewData.rating === 3 && '👌 Good'}
+                {reviewData.rating === 2 && '😐 Fair'}
+                {reviewData.rating === 1 && '👎 Poor'}
+              </p>
             </div>
 
             <div>
-              <Label>Comment</Label>
+              <Label htmlFor="review-comment">Comment * <span className="text-xs text-slate-500">(min 10 characters)</span></Label>
               <Textarea 
-                placeholder="Share your experience..." 
+                id="review-comment"
+                placeholder="What did you like? What could be improved? Be specific and constructive..." 
                 value={reviewData.comment}
                 onChange={(e) => setReviewData({...reviewData, comment: e.target.value})}
                 rows={4}
                 data-testid="review-comment-input"
+                maxLength={1000}
+                aria-required="true"
               />
+              <p className="text-xs text-slate-500 mt-1">{reviewData.comment.length}/1000 characters</p>
+            </div>
+
+            <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
+              <p className="text-xs text-blue-900">
+                💡 <strong>Tip:</strong> Constructive reviews help build trust in our community and improve service quality.
+              </p>
             </div>
 
             <Button 
               onClick={handleSubmitReview}
               className="w-full bg-blue-600 hover:bg-blue-700"
               data-testid="submit-review-button"
+              disabled={!reviewData.comment || reviewData.comment.trim().length < 10}
             >
               Submit Review
             </Button>

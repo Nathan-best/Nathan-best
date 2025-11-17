@@ -314,34 +314,59 @@ const LandingPage = ({ setUser }) => {
             </div>
 
             <div>
-              <Label>Location *</Label>
+              <Label htmlFor="location-input">Location * <span className="text-xs text-slate-500">(City, State)</span></Label>
               <Input 
+                id="location-input"
                 placeholder="Inglewood, CA" 
                 value={roleData.location}
                 onChange={(e) => setRoleData({...roleData, location: e.target.value})}
                 data-testid="location-input"
+                maxLength={200}
+                aria-required="true"
               />
+              <p className="text-xs text-slate-500 mt-1">Used to match you with nearby opportunities</p>
             </div>
 
             <div>
-              <Label>Phone Number *</Label>
+              <Label htmlFor="phone-input">Phone Number * <span className="text-xs text-slate-500">(10 digits)</span></Label>
               <Input 
+                id="phone-input"
+                type="tel"
                 placeholder="(555) 123-4567" 
                 value={roleData.phone}
                 onChange={(e) => setRoleData({...roleData, phone: e.target.value})}
                 data-testid="phone-input"
+                maxLength={20}
+                aria-required="true"
               />
+              <p className="text-xs text-slate-500 mt-1">For job notifications and coordination</p>
             </div>
 
             {roleData.role === 'technician' && (
               <div>
-                <Label>Specializations * (comma-separated)</Label>
+                <Label htmlFor="specializations-input">Specializations * <span className="text-xs text-slate-500">(comma-separated)</span></Label>
                 <Textarea 
+                  id="specializations-input"
                   placeholder="e.g., Pallet movers, Conveyors, Sorting arms, AGVs" 
                   value={roleData.specializations}
                   onChange={(e) => setRoleData({...roleData, specializations: e.target.value})}
                   data-testid="specializations-input"
+                  rows={3}
+                  maxLength={500}
+                  aria-required="true"
                 />
+                <p className="text-xs text-slate-500 mt-1">List the types of robotics equipment you can service</p>
+              </div>
+            )}
+
+            {roleData.role === 'technician' && (
+              <div className="bg-amber-50 border border-amber-200 rounded-lg p-3">
+                <div className="flex items-start gap-2">
+                  <svg className="w-5 h-5 text-amber-600 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                  <p className="text-xs text-amber-900">Your account will need admin verification before you can accept jobs. This usually takes 24-48 hours.</p>
+                </div>
               </div>
             )}
 

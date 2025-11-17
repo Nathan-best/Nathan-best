@@ -23,10 +23,15 @@ client = AsyncIOMotorClient(mongo_url)
 db = client[os.environ['DB_NAME']]
 
 # Create the main app without a prefix
-app = FastAPI()
+app = FastAPI(title="RobotiX Connect API", version="1.0.0", description="Robotics Maintenance Brokerage Platform")
 
 # Create a router with the /api prefix
 api_router = APIRouter(prefix="/api")
+
+# Rate limiting storage
+from collections import defaultdict
+from datetime import datetime, timezone
+rate_limit_storage = defaultdict(list)
 
 # ===== Models =====
 

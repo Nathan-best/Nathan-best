@@ -65,8 +65,13 @@ const JobDetails = ({ user }) => {
   };
 
   const handleSubmitReview = async () => {
-    if (!reviewData.comment) {
-      toast.error('Please add a comment');
+    if (!reviewData.comment || reviewData.comment.trim().length < 10) {
+      toast.error('Please add a comment (minimum 10 characters)');
+      return;
+    }
+
+    if (reviewData.comment.length > 1000) {
+      toast.error('Comment is too long (maximum 1000 characters)');
       return;
     }
 
@@ -76,12 +81,14 @@ const JobDetails = ({ user }) => {
         job_id: jobId,
         reviewee_id: revieweeId,
         rating: parseInt(reviewData.rating),
-        comment: reviewData.comment
+        comment: reviewData.comment.trim()
       });
-      toast.success('Review submitted!');
+      toast.success('Review submitted successfully! Thank you for your feedback.');
       setShowReviewDialog(false);
+      setReviewData({ rating: 5, comment: '' });
     } catch (error) {
-      toast.error('Failed to submit review');
+      const errorMsg = error.response?.data?.detail || 'Failed to submit review. Please try again.';
+      toast.error(errorMsg);
     }
   };
 

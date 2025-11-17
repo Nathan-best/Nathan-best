@@ -30,7 +30,6 @@ api_router = APIRouter(prefix="/api")
 
 # Rate limiting storage
 from collections import defaultdict
-from datetime import datetime, timezone
 rate_limit_storage = defaultdict(list)
 
 # ===== Models =====
@@ -529,11 +528,11 @@ List top 3 matches with brief reason (1 sentence each).
             "ai_recommendation": "AI matching temporarily unavailable. Showing all verified technicians sorted by rating.",
             "technicians": sorted(techs, key=lambda x: x.get('rating', 0), reverse=True)
         }
-    except Exception as e:
+    except Exception:
         # Fallback on any error
         return {
             "job": job_doc,
-            "ai_recommendation": f"AI matching unavailable. Showing all verified technicians.",
+            "ai_recommendation": "AI matching unavailable. Showing all verified technicians.",
             "technicians": techs
         }
 

@@ -204,9 +204,14 @@ async def get_current_user(authorization: Optional[str] = None, session_token: O
 @api_router.post("/auth/session")
 async def create_session(request: Request):
     """Process session_id from Google OAuth and create user session"""
+    # Rate limiting
+    client_ip = request.client.host if request.client else "unknown"
+    if not check_rate_limit(f"auth_session_{client_ip}", max_requests=10, window_seconds=60):
+        raise HTTPException(status_code=429, detail="Too many authentication attempts. Please try again later.")
+    
     session_id = request.headers.get("X-Session-ID")
-    if not session_id:
-        raise HTTPException(status_code=400, detail="Session ID required")
+    if not session_id or len(session_id) > 500:
+        raise HTTPException(status_code=400, detail="Invalid session ID")
     
     # Get session data from Emergent Auth
     import aiohttp

@@ -178,7 +178,7 @@ const DashboardIndustrial = ({ user, setUser }) => {
                   {user.verified ? 'VERIFIED' : 'PENDING'}
                 </div>
               )}
-              <button onClick={handleLogout} className="neon-outline px-6 py-2" data-testid=\"logout-button">
+              <button onClick={handleLogout} className="neon-outline px-6 py-2" data-testid="logout-button">
                 LOGOUT
               </button>
             </div>

@@ -375,9 +375,14 @@ const LandingPage = ({ setUser }) => {
               className="w-full bg-blue-600 hover:bg-blue-700"
               disabled={loading}
               data-testid="complete-profile-button"
+              aria-busy={loading}
             >
-              {loading ? 'Creating Account...' : 'Complete Profile'}
+              {loading ? 'Creating Account...' : `Complete ${roleData.role === 'warehouse' ? 'Warehouse' : 'Technician'} Profile`}
             </Button>
+            
+            <p className="text-xs text-center text-slate-500 mt-2">
+              By creating an account, you agree to our Terms of Service and Privacy Policy
+            </p>
           </div>
         </DialogContent>
       </Dialog>

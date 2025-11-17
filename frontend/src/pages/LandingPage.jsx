@@ -285,14 +285,17 @@ const LandingPage = ({ setUser }) => {
 
       {/* Role Selection Dialog */}
       <Dialog open={showRoleDialog} onOpenChange={setShowRoleDialog}>
-        <DialogContent className="max-w-md" data-testid="role-selection-dialog">
+        <DialogContent className="max-w-md" data-testid="role-selection-dialog" aria-describedby="role-dialog-description">
           <DialogHeader>
             <DialogTitle className="text-2xl font-bold">Complete Your Profile</DialogTitle>
+            <DialogDescription id="role-dialog-description">
+              Tell us about yourself to personalize your experience on RobotiX Connect.
+            </DialogDescription>
           </DialogHeader>
           <div className="space-y-4 mt-4">
             <div>
-              <Label>I am a...</Label>
-              <RadioGroup value={roleData.role} onValueChange={(val) => setRoleData({...roleData, role: val})}>
+              <Label>I am a... *</Label>
+              <RadioGroup value={roleData.role} onValueChange={(val) => setRoleData({...roleData, role: val})} aria-label="Select your role">
                 <div className="flex items-center space-x-2 border rounded-lg p-3 cursor-pointer hover:bg-slate-50" data-testid="role-warehouse-option">
                   <RadioGroupItem value="warehouse" id="warehouse" />
                   <Label htmlFor="warehouse" className="flex-1 cursor-pointer">

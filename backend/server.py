@@ -131,6 +131,35 @@ class CheckoutRequest(BaseModel):
     job_id: str
     origin_url: str
 
+# ===== Security & Rate Limiting =====
+
+def check_rate_limit(identifier: str, max_requests: int = 100, window_seconds: int = 60) -> bool:
+    """Simple rate limiting check"""
+    now = datetime.now(timezone.utc)
+    cutoff = now.timestamp() - window_seconds
+    
+    # Clean old entries
+    rate_limit_storage[identifier] = [ts for ts in rate_limit_storage[identifier] if ts > cutoff]
+    
+    # Check limit
+    if len(rate_limit_storage[identifier]) >= max_requests:
+        return False
+    
+    # Add new request
+    rate_limit_storage[identifier].append(now.timestamp())
+    return True
+
+def sanitize_input(text: str) -> str:
+    """Basic input sanitization"""
+    if not text:
+        return text
+    # Remove potential script tags and dangerous characters
+    dangerous_patterns = ['<script', 'javascript:', 'onerror=', 'onclick=']
+    sanitized = text
+    for pattern in dangerous_patterns:
+        sanitized = sanitized.replace(pattern, '')
+    return sanitized.strip()
+
 # ===== Auth Helpers =====
 
 async def get_current_user(authorization: Optional[str] = None, session_token: Optional[str] = None) -> Optional[User]:
@@ -142,7 +171,7 @@ async def get_current_user(authorization: Optional[str] = None, session_token: O
     elif session_token:
         token = session_token
     
-    if not token:
+    if not token or len(token) > 500:  # Prevent token abuse
         return None
     
     # Find session
@@ -160,6 +189,8 @@ async def get_current_user(authorization: Optional[str] = None, session_token: O
         expires_at = expires_at.replace(tzinfo=timezone.utc)
     
     if expires_at < datetime.now(timezone.utc):
+        # Clean up expired session
+        await db.user_sessions.delete_one({"session_token": token})
         return None
     
     # Get user

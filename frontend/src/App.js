@@ -63,6 +63,10 @@ function App() {
             path="/payment-success" 
             element={user ? <PaymentSuccess user={user} /> : <Navigate to="/" />} 
           />
+          <Route 
+            path="/pricing" 
+            element={user ? <PricingPage user={user} /> : <Navigate to="/" />} 
+          />
         </Routes>
       </BrowserRouter>
       <Toaster position="top-right" richColors theme="dark" />

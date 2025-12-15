@@ -247,6 +247,9 @@ const DashboardIndustrial = ({ user, setUser }) => {
         userRole={user.role}
       />
 
+      {/* Quick Tips */}
+      <QuickTips userRole={user.role} />
+
       {/* Subscription Upgrade Banner */}
       {user.role === 'warehouse' && !subscription && jobs.length > 0 && (
         <div className="mb-8 metallic-panel p-6 border-neon-yellow/50 cursor-pointer hover:border-neon-yellow transition-all" onClick={() => navigate('/pricing')}>

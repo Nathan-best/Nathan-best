@@ -406,7 +406,7 @@ const LandingPagePro = ({ setUser }) => {
                 </p>
               </div>
               <button 
-                onClick={handleLogin}
+                onClick={() => navigate('/join-technician')}
                 className="neon-yellow-button text-lg px-10 py-4"
               >
                 JOIN AS TECHNICIAN

@@ -6,6 +6,7 @@ import DashboardIndustrial from './pages/DashboardIndustrial';
 import JobDetails from './pages/JobDetails';
 import PaymentSuccess from './pages/PaymentSuccess';
 import PricingPage from './pages/PricingPage';
+import RevenueDashboard from './pages/RevenueDashboard';
 import { Toaster } from './components/ui/sonner';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;

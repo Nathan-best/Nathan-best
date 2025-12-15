@@ -36,7 +36,19 @@ const DashboardIndustrial = ({ user, setUser }) => {
     if (user.role === 'admin') {
       loadStats();
     }
+    if (user.role === 'warehouse') {
+      loadSubscription();
+    }
   }, [user]);
+
+  const loadSubscription = async () => {
+    try {
+      const response = await api.get('/subscriptions/my-subscription');
+      setSubscription(response.data.subscription);
+    } catch (error) {
+      console.error('Failed to load subscription');
+    }
+  };
 
   const loadJobs = async () => {
     try {

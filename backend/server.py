@@ -686,7 +686,11 @@ async def create_checkout(
         tech_id=job_doc['assigned_tech_id'],
         amount=amount,
         platform_commission=commission,
+        platform_commission_rate=commission_rate,
         tech_payout=tech_payout,
+        emergency_fee=emergency_fee,
+        diagnostics_fee=diagnostics_fee,
+        subscription_discount=discount_amount,
         stripe_session_id=session.session_id,
         payment_status="pending"
     )

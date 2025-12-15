@@ -19,7 +19,9 @@ const DashboardIndustrial = ({ user, setUser }) => {
   const [jobs, setJobs] = useState([]);
   const [stats, setStats] = useState(null);
   const [showJobDialog, setShowJobDialog] = useState(false);
+  const [showHelpCenter, setShowHelpCenter] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [subscription, setSubscription] = useState(null);
   const [jobData, setJobData] = useState({
     title: '',
     equipment_type: '',

@@ -104,9 +104,37 @@ class Transaction(BaseModel):
     tech_id: str
     amount: float
     platform_commission: float
+    platform_commission_rate: float  # Store the rate used
     tech_payout: float
+    emergency_fee: float = 0.0
+    diagnostics_fee: float = 0.0
+    subscription_discount: float = 0.0
     stripe_session_id: Optional[str] = None
     payment_status: str  # 'pending', 'paid', 'completed'
+    payout_status: str = 'pending'  # 'pending', 'processed'
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+
+class Subscription(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    warehouse_id: str
+    plan_type: str  # 'basic', 'standard', 'enterprise'
+    price: float
+    visits_per_month: int
+    status: str  # 'active', 'cancelled', 'expired'
+    visits_used: int = 0
+    current_period_start: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    current_period_end: datetime = Field(default_factory=lambda: datetime.now(timezone.utc) + timedelta(days=30))
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    
+class TechnicianVerification(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    tech_id: str
+    verification_fee_paid: bool = False
+    verification_fee_amount: float = 49.0
+    background_check_status: str = 'pending'  # 'pending', 'completed', 'failed'
+    stripe_payment_id: Optional[str] = None
     created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
 
 class Review(BaseModel):

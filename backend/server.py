@@ -620,11 +620,40 @@ async def create_checkout(
     if job_doc['status'] != 'completed':
         raise HTTPException(status_code=400, detail="Job must be completed first")
     
-    # Calculate amounts
+    # Calculate commission based on urgency
     amount = float(job_doc['budget'])
-    commission_rate = 0.15  # 15% platform commission
+    urgency = job_doc.get('urgency', 'medium')
+    
+    # Dynamic commission rates
+    commission_rates = {
+        'low': 0.10,      # 10% for low urgency
+        'medium': 0.15,   # 15% for medium urgency
+        'high': 0.25      # 25% for emergency/high urgency
+    }
+    commission_rate = commission_rates.get(urgency, 0.15)
+    
+    # Emergency dispatch fee (for high urgency)
+    emergency_fee = 50.0 if urgency == 'high' else 0.0  # Platform keeps 30% of $199 emergency fee
+    
+    # Check for subscription discount
+    subscription = await db.subscriptions.find_one({
+        "warehouse_id": user.id,
+        "status": "active"
+    })
+    
+    discount_rate = 0.0
+    if subscription:
+        plan_discounts = {'basic': 0.05, 'standard': 0.10, 'enterprise': 0.15}
+        discount_rate = plan_discounts.get(subscription.get('plan_type'), 0.0)
+    
+    discount_amount = amount * discount_rate
+    
+    # Calculate final amounts
     commission = amount * commission_rate
-    tech_payout = amount - commission
+    tech_payout = amount - commission - discount_amount + (emergency_fee * 0.7 if emergency_fee > 0 else 0)
+    
+    # Diagnostics fee (if applicable)
+    diagnostics_fee = 0.0  # Would be added if diagnostic was performed before repair
     
     # Initialize Stripe
     api_key = os.environ.get('STRIPE_API_KEY')

@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import axios from 'axios';
 import LandingPagePro from './pages/LandingPagePro';
 import TechnicianLanding from './pages/TechnicianLanding';
+import SolutionsPage from './pages/SolutionsPage';
 import DashboardIndustrial from './pages/DashboardIndustrial';
 import JobDetails from './pages/JobDetails';
 import PaymentSuccess from './pages/PaymentSuccess';

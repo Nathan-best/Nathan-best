@@ -791,6 +791,249 @@ async def get_user_reviews(user_id: str):
     
     return reviews
 
+# ===== Subscription Endpoints =====
+
+@api_router.get("/subscriptions/plans")
+async def get_subscription_plans():
+    """Get available subscription plans"""
+    plans = [
+        {
+            "id": "basic",
+            "name": "Basic",
+            "price": 199,
+            "visits_per_month": 1,
+            "features": [
+                "1 preventive visit per month",
+                "Discounted repair rates (5% off)",
+                "Priority support",
+                "Free diagnostics"
+            ]
+        },
+        {
+            "id": "standard",
+            "name": "Standard",
+            "price": 399,
+            "visits_per_month": 2,
+            "popular": True,
+            "features": [
+                "2 preventive visits per month",
+                "Discounted repair rates (10% off)",
+                "Priority technician matching",
+                "Free diagnostics",
+                "24/7 phone support",
+                "No emergency dispatch fee"
+            ]
+        },
+        {
+            "id": "enterprise",
+            "name": "Enterprise",
+            "price": 799,
+            "visits_per_month": 4,
+            "features": [
+                "4 preventive visits per month",
+                "Discounted repair rates (15% off)",
+                "Dedicated account manager",
+                "Free diagnostics",
+                "24/7 priority hotline",
+                "Free emergency dispatch",
+                "Quarterly health reports",
+                "Parts discount (10%)"
+            ]
+        }
+    ]
+    return plans
+
+@api_router.post("/subscriptions/subscribe")
+async def subscribe_to_plan(
+    request: Request,
+    authorization: Optional[str] = Header(None)
+):
+    """Subscribe to a maintenance plan"""
+    session_token = request.cookies.get("session_token")
+    user = await get_current_user(authorization, session_token)
+    
+    if not user or user.role != 'warehouse':
+        raise HTTPException(status_code=403, detail="Only warehouses can subscribe")
+    
+    body = await request.json()
+    plan_type = body.get('plan_type')
+    
+    # Plan pricing
+    plan_prices = {"basic": 199, "standard": 399, "enterprise": 799}
+    plan_visits = {"basic": 1, "standard": 2, "enterprise": 4}
+    
+    if plan_type not in plan_prices:
+        raise HTTPException(status_code=400, detail="Invalid plan type")
+    
+    # Check for existing active subscription
+    existing = await db.subscriptions.find_one({
+        "warehouse_id": user.id,
+        "status": "active"
+    })
+    
+    if existing:
+        raise HTTPException(status_code=400, detail="You already have an active subscription")
+    
+    # Create subscription
+    subscription = Subscription(
+        warehouse_id=user.id,
+        plan_type=plan_type,
+        price=plan_prices[plan_type],
+        visits_per_month=plan_visits[plan_type],
+        status="active"
+    )
+    
+    sub_doc = subscription.model_dump()
+    sub_doc['current_period_start'] = sub_doc['current_period_start'].isoformat()
+    sub_doc['current_period_end'] = sub_doc['current_period_end'].isoformat()
+    sub_doc['created_at'] = sub_doc['created_at'].isoformat()
+    
+    await db.subscriptions.insert_one(sub_doc)
+    
+    return {
+        "message": f"Successfully subscribed to {plan_type.title()} plan",
+        "subscription": subscription.model_dump()
+    }
+
+@api_router.get("/subscriptions/my-subscription")
+async def get_my_subscription(
+    request: Request,
+    authorization: Optional[str] = Header(None)
+):
+    """Get current subscription"""
+    session_token = request.cookies.get("session_token")
+    user = await get_current_user(authorization, session_token)
+    
+    if not user or user.role != 'warehouse':
+        raise HTTPException(status_code=403, detail="Only warehouses have subscriptions")
+    
+    subscription = await db.subscriptions.find_one({
+        "warehouse_id": user.id,
+        "status": "active"
+    }, {"_id": 0})
+    
+    if not subscription:
+        return {"subscription": None}
+    
+    return {"subscription": subscription}
+
+@api_router.post("/subscriptions/cancel")
+async def cancel_subscription(
+    request: Request,
+    authorization: Optional[str] = Header(None)
+):
+    """Cancel subscription"""
+    session_token = request.cookies.get("session_token")
+    user = await get_current_user(authorization, session_token)
+    
+    if not user or user.role != 'warehouse':
+        raise HTTPException(status_code=403, detail="Only warehouses can cancel subscriptions")
+    
+    result = await db.subscriptions.update_one(
+        {"warehouse_id": user.id, "status": "active"},
+        {"$set": {"status": "cancelled"}}
+    )
+    
+    if result.modified_count == 0:
+        raise HTTPException(status_code=404, detail="No active subscription found")
+    
+    return {"message": "Subscription cancelled successfully"}
+
+# ===== Technician Verification & Onboarding =====
+
+@api_router.post("/technicians/pay-verification-fee")
+async def pay_verification_fee(
+    request: Request,
+    authorization: Optional[str] = Header(None)
+):
+    """Pay technician verification fee"""
+    session_token = request.cookies.get("session_token")
+    user = await get_current_user(authorization, session_token)
+    
+    if not user or user.role != 'technician':
+        raise HTTPException(status_code=403, detail="Only technicians can pay verification fee")
+    
+    # Check if already paid
+    existing = await db.technician_verifications.find_one({"tech_id": user.id})
+    if existing and existing.get('verification_fee_paid'):
+        raise HTTPException(status_code=400, detail="Verification fee already paid")
+    
+    # Create verification record
+    verification = TechnicianVerification(
+        tech_id=user.id,
+        verification_fee_paid=True,
+        verification_fee_amount=49.0
+    )
+    
+    ver_doc = verification.model_dump()
+    ver_doc['created_at'] = ver_doc['created_at'].isoformat()
+    
+    await db.technician_verifications.insert_one(ver_doc)
+    
+    return {
+        "message": "Verification fee payment recorded. Background check will be completed within 48 hours.",
+        "amount": 49.0
+    }
+
+# ===== Revenue Analytics =====
+
+@api_router.get("/admin/revenue-analytics")
+async def get_revenue_analytics(
+    request: Request,
+    authorization: Optional[str] = Header(None)
+):
+    """Get detailed revenue analytics (admin only)"""
+    session_token = request.cookies.get("session_token")
+    user = await get_current_user(authorization, session_token)
+    
+    if not user or user.role != 'admin':
+        raise HTTPException(status_code=403, detail="Admin only")
+    
+    # Get all completed transactions
+    transactions = await db.payment_transactions.find({
+        "payment_status": "completed"
+    }).to_list(10000)
+    
+    # Calculate revenue streams
+    commission_revenue = sum(t.get('platform_commission', 0) for t in transactions)
+    emergency_fee_revenue = sum(t.get('emergency_fee', 0) for t in transactions)
+    diagnostics_revenue = sum(t.get('diagnostics_fee', 0) for t in transactions)
+    
+    # Subscription revenue
+    subscriptions = await db.subscriptions.find({"status": "active"}).to_list(1000)
+    monthly_recurring_revenue = sum(s.get('price', 0) for s in subscriptions)
+    
+    # Technician verification revenue
+    verifications = await db.technician_verifications.find({
+        "verification_fee_paid": True
+    }).to_list(1000)
+    verification_revenue = sum(v.get('verification_fee_amount', 0) for v in verifications)
+    
+    # Calculate by urgency level
+    low_urgency = [t for t in transactions if t.get('platform_commission_rate', 0) <= 0.10]
+    medium_urgency = [t for t in transactions if 0.10 < t.get('platform_commission_rate', 0) <= 0.15]
+    high_urgency = [t for t in transactions if t.get('platform_commission_rate', 0) > 0.15]
+    
+    return {
+        "total_revenue": commission_revenue + emergency_fee_revenue + diagnostics_revenue + verification_revenue,
+        "breakdown": {
+            "commission_revenue": commission_revenue,
+            "emergency_fees": emergency_fee_revenue,
+            "diagnostics_fees": diagnostics_revenue,
+            "verification_fees": verification_revenue,
+            "subscription_mrr": monthly_recurring_revenue
+        },
+        "transaction_counts": {
+            "total": len(transactions),
+            "low_urgency": len(low_urgency),
+            "medium_urgency": len(medium_urgency),
+            "high_urgency": len(high_urgency)
+        },
+        "active_subscriptions": len(subscriptions),
+        "verified_technicians": len(verifications),
+        "projected_annual_recurring": monthly_recurring_revenue * 12
+    }
+
 # ===== Admin Endpoints =====
 
 @api_router.get("/admin/stats")

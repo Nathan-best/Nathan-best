@@ -225,18 +225,87 @@ const DashboardIndustrial = ({ user, setUser }) => {
           </div>
         )}
 
-        {/* Dashboard Header */}
+        {/* Onboarding Tour */}
+      <OnboardingTour user={user} />
+
+      {/* Help Button - Floating */}
+      <button
+        onClick={() => setShowHelpCenter(true)}
+        className="fixed bottom-6 right-6 w-14 h-14 bg-electric-blue hover:bg-blue-600 rounded-full flex items-center justify-center shadow-glow-blue z-40 transition-transform hover:scale-110"
+        title="Help Center"
+      >
+        <svg className="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+      </button>
+
+      {/* Help Center Modal */}
+      <HelpCenter 
+        isOpen={showHelpCenter} 
+        onClose={() => setShowHelpCenter(false)}
+        userRole={user.role}
+      />
+
+      {/* Subscription Upgrade Banner */}
+      {user.role === 'warehouse' && !subscription && jobs.length > 0 && (
+        <div className="mb-8 metallic-panel p-6 border-neon-yellow/50 cursor-pointer hover:border-neon-yellow transition-all" onClick={() => navigate('/pricing')}>
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-4">
+              <div className="w-12 h-12 bg-neon-yellow/20 rounded-full flex items-center justify-center">
+                <svg className="w-6 h-6 text-neon-yellow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                </svg>
+              </div>
+              <div>
+                <h3 className="font-orbitron font-bold text-tech-white text-lg">UPGRADE TO PREMIUM</h3>
+                <p className="text-steel-gray font-inter text-sm">Save up to 15% on repairs + free diagnostics + priority matching. Plans from $199/month.</p>
+              </div>
+            </div>
+            <button className="neon-yellow-button px-6 py-3" onClick={() => navigate('/pricing')}>
+              View Plans
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* Dashboard Header */}
         <div className="flex justify-between items-center mb-8">
-          <h1 className="text-4xl font-orbitron font-black text-tech-white">
-            {user.role === 'warehouse' ? 'MY REPAIR REQUESTS' : user.role === 'technician' ? 'JOB QUEUE' : 'SYSTEM OVERVIEW'}
-          </h1>
+          <div>
+            <h1 className="text-4xl font-orbitron font-black text-tech-white">
+              {user.role === 'warehouse' ? 'MY REPAIR REQUESTS' : user.role === 'technician' ? 'JOB QUEUE' : 'SYSTEM OVERVIEW'}
+            </h1>
+            <p className="text-steel-gray font-inter mt-2">
+              {user.role === 'warehouse' && `${jobs.length} active ${jobs.length === 1 ? 'job' : 'jobs'}`}
+              {user.role === 'technician' && `${jobs.filter(j => j.status === 'open').length} available ${jobs.filter(j => j.status === 'open').length === 1 ? 'job' : 'jobs'}`}
+              {user.role === 'admin' && 'Platform management and analytics'}
+            </p>
+          </div>
           {user.role === 'warehouse' && (
+            <div className="flex gap-3">
+              <button 
+                onClick={() => navigate('/pricing')}
+                className="neon-outline px-6 py-3"
+              >
+                <svg className="w-5 h-5 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                </svg>
+                Upgrade
+              </button>
+              <button 
+                onClick={() => setShowJobDialog(true)}
+                className="neon-button text-lg px-8"
+                data-testid="post-job-button"
+              >
+                REQUEST REPAIR
+              </button>
+            </div>
+          )}
+          {user.role === 'admin' && (
             <button 
-              onClick={() => setShowJobDialog(true)}
-              className="neon-button text-lg px-8"
-              data-testid="post-job-button"
+              onClick={() => navigate('/admin/revenue')}
+              className="neon-button px-6 py-3"
             >
-              REQUEST REPAIR
+              Revenue Analytics
             </button>
           )}
         </div>

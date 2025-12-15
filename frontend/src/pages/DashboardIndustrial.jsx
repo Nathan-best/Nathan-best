@@ -320,9 +320,88 @@ const DashboardIndustrial = ({ user, setUser }) => {
                 </svg>
               </div>
               <p className="text-tech-white font-orbitron font-bold text-xl mb-2">NO ACTIVE JOBS</p>
-              <p className="text-steel-gray font-inter">
-                {user.role === 'warehouse' ? 'Submit your first repair request to get started' : 'Check back soon for new repair opportunities'}
-              </p>
+              
+              {user.role === 'warehouse' ? (
+                <div>
+                  <p className="text-steel-gray font-inter mb-6">
+                    Your robots are running smoothly! Post a job when you need maintenance or repairs.
+                  </p>
+                  <div className="max-w-2xl mx-auto text-left space-y-4 mb-6">
+                    <div className="flex items-start gap-3">
+                      <div className="w-8 h-8 bg-electric-blue/20 rounded-full flex items-center justify-center flex-shrink-0">
+                        <span className="text-electric-blue font-bold">1</span>
+                      </div>
+                      <div>
+                        <h4 className="font-inter font-bold text-tech-white mb-1">Click "REQUEST REPAIR"</h4>
+                        <p className="text-sm text-steel-gray">Start by describing your equipment issue</p>
+                      </div>
+                    </div>
+                    <div className="flex items-start gap-3">
+                      <div className="w-8 h-8 bg-electric-blue/20 rounded-full flex items-center justify-center flex-shrink-0">
+                        <span className="text-electric-blue font-bold">2</span>
+                      </div>
+                      <div>
+                        <h4 className="font-inter font-bold text-tech-white mb-1">Add details & photos</h4>
+                        <p className="text-sm text-steel-gray">Upload error codes and equipment photos for better matches</p>
+                      </div>
+                    </div>
+                    <div className="flex items-start gap-3">
+                      <div className="w-8 h-8 bg-electric-blue/20 rounded-full flex items-center justify-center flex-shrink-0">
+                        <span className="text-electric-blue font-bold">3</span>
+                      </div>
+                      <div>
+                        <h4 className="font-inter font-bold text-tech-white mb-1">Get matched instantly</h4>
+                        <p className="text-sm text-steel-gray">AI finds the perfect technician for your needs</p>
+                      </div>
+                    </div>
+                  </div>
+                  <button 
+                    onClick={() => setShowJobDialog(true)}
+                    className="neon-button px-8 py-3"
+                  >
+                    POST YOUR FIRST JOB
+                  </button>
+                </div>
+              ) : user.role === 'technician' ? (
+                <div>
+                  <p className="text-steel-gray font-inter mb-6">
+                    {user.verified 
+                      ? 'No jobs available right now. New opportunities appear throughout the day!' 
+                      : 'Complete verification to start accepting jobs and earning.'
+                    }
+                  </p>
+                  {!user.verified && (
+                    <div className="max-w-md mx-auto metallic-panel p-6 mb-6">
+                      <div className="flex items-center gap-3 mb-4">
+                        <div className="w-10 h-10 bg-neon-yellow/20 rounded-full flex items-center justify-center">
+                          <svg className="w-5 h-5 text-neon-yellow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                          </svg>
+                        </div>
+                        <div className="text-left">
+                          <h4 className="font-orbitron font-bold text-tech-white">VERIFICATION PENDING</h4>
+                          <p className="text-sm text-steel-gray font-inter">Admin approval required (24-48 hours)</p>
+                        </div>
+                      </div>
+                      <p className="text-xs text-steel-gray font-inter text-left">
+                        Once verified, you'll get instant notifications for jobs matching your skills and location.
+                      </p>
+                    </div>
+                  )}
+                  <div className="flex justify-center gap-4">
+                    <button 
+                      onClick={() => setShowHelpCenter(true)}
+                      className="neon-outline px-6 py-3"
+                    >
+                      Learn More
+                    </button>
+                  </div>
+                </div>
+              ) : (
+                <p className="text-steel-gray font-inter">
+                  Monitor platform activity, manage users, and track revenue.
+                </p>
+              )}
             </div>
           ) : (
             jobs.map((job) => (

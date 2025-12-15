@@ -73,6 +73,10 @@ function App() {
             path="/admin/revenue" 
             element={user ? <RevenueDashboard user={user} /> : <Navigate to="/" />} 
           />
+          <Route 
+            path="/join-technician" 
+            element={user ? <Navigate to="/dashboard" /> : <TechnicianLanding setUser={setUser} />} 
+          />
         </Routes>
       </BrowserRouter>
       <Toaster position="top-right" richColors theme="dark" />

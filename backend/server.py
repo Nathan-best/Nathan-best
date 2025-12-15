@@ -365,9 +365,17 @@ async def create_job(
     if not user or user.role != 'warehouse':
         raise HTTPException(status_code=403, detail="Only warehouses can post jobs")
     
-    # Rate limiting per user
-    if not check_rate_limit(f"create_job_{user.id}", max_requests=20, window_seconds=3600):
-        raise HTTPException(status_code=429, detail="Job posting limit reached. Please try again later.")
+    # Check subscription status for priority features
+    subscription = await db.subscriptions.find_one({
+        "warehouse_id": user.id,
+        "status": "active",
+        "current_period_end": {"$gte": datetime.now(timezone.utc).isoformat()}
+    })
+    
+    # Rate limiting - higher for subscribers
+    max_jobs = 50 if subscription else 20
+    if not check_rate_limit(f"create_job_{user.id}", max_requests=max_jobs, window_seconds=3600):
+        raise HTTPException(status_code=429, detail="Job posting limit reached. Upgrade to Premium for unlimited posts.")
     
     # Sanitize text inputs
     job = Job(
@@ -384,6 +392,12 @@ async def create_job(
     
     job_doc = job.model_dump()
     job_doc['created_at'] = job_doc['created_at'].isoformat()
+    
+    # Priority flag for subscribers
+    if subscription:
+        job_doc['priority'] = True
+        job_doc['subscription_plan'] = subscription.get('plan_type')
+    
     await db.jobs.insert_one(job_doc)
     
     return job

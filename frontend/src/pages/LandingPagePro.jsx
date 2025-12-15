@@ -176,7 +176,7 @@ const LandingPagePro = ({ setUser }) => {
                   REQUEST REPAIR
                 </button>
                 <button 
-                  onClick={handleLogin}
+                  onClick={() => navigate('/join-technician')}
                   className="neon-outline text-lg px-10 py-4"
                   data-testid="hero-join-tech-button"
                 >

@@ -11,6 +11,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '.
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '../components/Tooltip';
 import OnboardingTour from '../components/OnboardingTour';
 import HelpCenter from '../components/HelpCenter';
+import QuickTips from '../components/QuickTips';
 import { toast } from 'sonner';
 import { api } from '../App';
 
